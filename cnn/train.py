@@ -101,7 +101,6 @@ def main():
 		scheduler.step()
 		logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
 		model.drop_path_prob = args.drop_path_prob * epoch / args.epochs
-		
 		train_acc, train_obj = train(train_queue, model, criterion, optimizer)
 		logging.info('train_acc %f', train_acc)
 		
@@ -125,7 +124,6 @@ def train(train_queue, model, criterion, optimizer):
 	for step, (input, target) in enumerate(train_queue):
 		input = Variable(input).cuda()
 		target = Variable(target).cuda(async=True)
-		
 		optimizer.zero_grad()
 		logits, logits_aux = model(input)
 		loss = criterion(logits, target)

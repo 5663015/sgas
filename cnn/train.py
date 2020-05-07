@@ -15,6 +15,7 @@ import torch.backends.cudnn as cudnn
 import uuid
 from torch.autograd import Variable
 from model import NetworkCIFAR as Network
+from thop import profile
 
 os.environ["cuda_visible_devices"] = '1'
 
@@ -72,7 +73,10 @@ def main():
 	genotype = eval("genotypes.%s" % args.arch)
 	model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
 	model = model.cuda()
+	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
 	
+	
+	logging.info('flops = %fM', flops / 1e6)
 	logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 	
 	criterion = nn.CrossEntropyLoss()

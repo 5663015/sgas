@@ -209,6 +209,10 @@ v11_13 = Genotype(normal=[('sep_conv_3x3', 1), ('dil_conv_5x5', 0), ('dil_conv_3
                 reduce=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0), ('skip_connect', 2), ('avg_pool_3x3', 0), ('skip_connect', 3), ('avg_pool_3x3', 0), ('skip_connect', 2)], reduce_concat=range(2, 6))
 v11_14 = Genotype(normal=[('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('dil_conv_3x3', 2), ('sep_conv_5x5', 1), ('sep_conv_3x3', 1), ('dil_conv_3x3', 3), ('dil_conv_5x5', 4), ('dil_conv_3x3', 2)], normal_concat=range(2, 6),
                 reduce=[('avg_pool_3x3', 1), ('max_pool_3x3', 0), ('avg_pool_3x3', 1), ('skip_connect', 2), ('skip_connect', 3), ('avg_pool_3x3', 1), ('avg_pool_3x3', 1), ('dil_conv_3x3', 4)], reduce_concat=range(2, 6))
+v11_15 = Genotype(normal=[('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_3x3', 2), ('skip_connect', 0), ('dil_conv_5x5', 3), ('skip_connect', 0), ('dil_conv_5x5', 4), ('dil_conv_3x3', 3)], normal_concat=range(2, 6),
+				reduce=[('max_pool_3x3', 0), ('dil_conv_3x3', 1), ('max_pool_3x3', 0), ('skip_connect', 2), ('skip_connect', 2), ('avg_pool_3x3', 0), ('skip_connect', 2), ('skip_connect', 3)], reduce_concat=range(2, 6))
+v11_16 = Genotype(normal=[('sep_conv_3x3', 1), ('skip_connect', 0), ('skip_connect', 0), ('dil_conv_3x3', 2), ('sep_conv_3x3', 1), ('dil_conv_3x3', 3), ('dil_conv_3x3', 4), ('dil_conv_3x3', 3)], normal_concat=range(2, 6),
+				reduce=[('max_pool_3x3', 0), ('sep_conv_3x3', 1), ('skip_connect', 2), ('avg_pool_3x3', 1), ('skip_connect', 3), ('avg_pool_3x3', 1), ('skip_connect', 2), ('skip_connect', 3)], reduce_concat=range(2, 6))
 
 
-
+# nohup python -u train.py --auxiliary --cutout --arch v11_14 --exp_name full_train_v11_14 --gpu 5 > full_train_v11_14.log 2>&1 &

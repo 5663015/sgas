@@ -73,6 +73,7 @@ def main():
 	genotype = eval("genotypes.%s" % args.arch)
 	model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
 	model = model.cuda()
+	model.drop_path_prob = args.drop_path_prob
 	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
 	
 	

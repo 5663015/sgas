@@ -70,8 +70,26 @@ def main():
 	logging.info('gpu device = %d' % args.gpu)
 	logging.info("args = %s", args)
 	
+	# read data
+	train_transform, valid_transform = utils._data_transforms_cifar10(args)
+	if args.dataset == 'cifar10':
+		args.data = '/home/work/dataset/cifar'
+		train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
+		valid_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=valid_transform)
+		classes = 10
+	if args.dataset == 'cifar100':
+		args.data = '/home/work/dataset/cifar100'
+		train_data = dset.CIFAR100(root=args.data, train=True, download=True, transform=train_transform)
+		valid_data = dset.CIFAR100(root=args.data, train=False, download=True, transform=valid_transform)
+		classes = 100
+	train_queue = torch.utils.data.DataLoader(
+		train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=2)
+	valid_queue = torch.utils.data.DataLoader(
+		valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
+	
+	# model
 	genotype = eval("genotypes.%s" % args.arch)
-	model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
+	model = Network(args.init_channels, classes, args.layers, args.auxiliary, genotype)
 	model = model.cuda()
 	model.drop_path_prob = args.drop_path_prob
 	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
@@ -88,16 +106,6 @@ def main():
 		momentum=args.momentum,
 		weight_decay=args.weight_decay
 	)
-	
-	train_transform, valid_transform = utils._data_transforms_cifar10(args)
-	train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
-	valid_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=valid_transform)
-	
-	train_queue = torch.utils.data.DataLoader(
-		train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=2)
-	
-	valid_queue = torch.utils.data.DataLoader(
-		valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
 	
 	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(args.epochs))
 	

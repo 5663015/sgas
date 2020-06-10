@@ -63,7 +63,7 @@ def main():
 		sys.exit(1)
 	
 	np.random.seed(args.seed)
-	torch.cuda.set_device(args.gpu)
+	# torch.cuda.set_device(args.gpu)
 	cudnn.benchmark = True
 	torch.manual_seed(args.seed)
 	cudnn.enabled=True
@@ -94,7 +94,7 @@ def main():
 	model = model.cuda()
 	model.drop_path_prob = args.drop_path_prob
 	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
-	
+	model = torch.nn.DataParallel(model).cuda()
 	
 	logging.info('flops = %fM', flops / 1e6)
 	logging.info("param size = %fMB", utils.count_parameters_in_MB(model))

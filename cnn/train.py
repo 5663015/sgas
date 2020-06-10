@@ -42,7 +42,7 @@ parser.add_argument('--seed', type=int, default=0, help='random seed')
 parser.add_argument('--arch', type=str, default='DARTS', help='which architecture to use')
 parser.add_argument('--grad_clip', type=float, default=5, help='gradient clipping')
 parser.add_argument('--exp_name', type=str, default='full_train', help='experiment name')
-parser.add_argument('--resume', type=bool, action='store_true', default=False, help='experiment name')
+parser.add_argument('--resume', action='store_true', default=False, help='experiment name')
 parser.add_argument('--start_epoch', type=int, default=0, help='random seed')
 args = parser.parse_args()
 

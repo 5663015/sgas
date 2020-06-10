@@ -115,6 +115,7 @@ def main():
 	if args.resume:
 		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_1-20200608/weights.pt')
 		model.load_state_dict(state)
+		model = model.cuda()
 		for i in range(args.start_epoch):
 			scheduler.step()
 		best_val_acc = 97.2

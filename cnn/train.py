@@ -113,12 +113,13 @@ def main():
 	best_val_acc = 0.
 	
 	if args.resume:
-		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_1-20200608/weights.pt')
+		# state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_1-20200608/weights.pt')
+		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s2_factor1-20200609/weights.pt')
 		model.load_state_dict(state)
 		model = model.cuda()
 		for i in range(args.start_epoch):
 			scheduler.step()
-		best_val_acc = 97.2
+		best_val_acc = 94.6#97.2
 		
 	for epoch in range(args.start_epoch, args.epochs):
 		scheduler.step()

@@ -42,6 +42,8 @@ parser.add_argument('--seed', type=int, default=0, help='random seed')
 parser.add_argument('--arch', type=str, default='DARTS', help='which architecture to use')
 parser.add_argument('--grad_clip', type=float, default=5, help='gradient clipping')
 parser.add_argument('--exp_name', type=str, default='full_train', help='experiment name')
+parser.add_argument('--resume', type=bool, action='store_true', default=False, help='experiment name')
+parser.add_argument('--start_epoch', type=int, default=0, help='random seed')
 args = parser.parse_args()
 
 args.save = '{}-{}'.format(args.exp_name, time.strftime("%Y%m%d"))
@@ -93,8 +95,8 @@ def main():
 	model = Network(args.init_channels, classes, args.layers, args.auxiliary, genotype)
 	model = model.cuda()
 	model.drop_path_prob = args.drop_path_prob
-	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
 	
+	flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).cuda(),), verbose=False)
 	logging.info('flops = %fM', flops / 1e6)
 	logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 	
@@ -108,9 +110,16 @@ def main():
 	)
 	
 	scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(args.epochs))
-	
 	best_val_acc = 0.
-	for epoch in range(args.epochs):
+	
+	if args.resume:
+		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_1-20200608/weights.pt')
+		model.load_state_dict(state)
+		for i in range(args.start_epoch):
+			scheduler.step()
+		best_val_acc = 97.2
+		
+	for epoch in range(args.start_epoch, args.epochs):
 		scheduler.step()
 		logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
 		model.drop_path_prob = args.drop_path_prob * epoch / args.epochs

@@ -56,8 +56,8 @@ def main():
 		sys.exit(1)
 	
 	np.random.seed(args.seed)
-	# torch.cuda.set_device(args.gpu)
-	device = torch.device("cuda")
+	torch.cuda.set_device(args.gpu)
+	# device = torch.device("cuda")
 	cudnn.benchmark = True
 	torch.manual_seed(args.seed)
 	cudnn.enabled = True
@@ -98,7 +98,7 @@ def main():
 	state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s2_0-20200608/best_weights.pt',
 	                   map_location='cpu')
 	model.load_state_dict(state)
-	model = model.to(device)
+	model = model.cuda()
 	
 	valid_acc, valid_obj = infer(valid_queue, model, criterion)
 	print('val acc: {}, val loss: {}'.format(valid_acc, valid_obj))

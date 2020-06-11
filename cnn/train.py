@@ -141,7 +141,13 @@ def main():
 			# logging.info('valid_acc %f\tbest_val_acc %f', valid_acc, best_val_acc)
 			logging.info('val_acc: {:.6}, best_val_acc: \033[31m{:.6}\033[0m'.format(valid_acc, best_val_acc))
 		
-		utils.save(model, os.path.join(args.save, 'weights.pt'))
+		state = {
+			'epoch': epoch,
+			'model_state': model.state_dict(),
+			'optimizer': optimizer.state_dict(),
+			'best_val_acc': best_val_acc
+		}
+		torch.save(state, os.path.join(args.save, 'weights.pt.tar'))
 
 
 def train(train_queue, model, criterion, optimizer):

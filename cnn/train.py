@@ -118,12 +118,13 @@ def main():
 		# state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s2_factor1-20200609/weights.pt', map_location='cpu')
 		# state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_factor1-20200609/weights.pt', map_location='cpu')
 		# state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_0-20200608/weights.pt', map_location='cpu')
-		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s2_0-20200608/weights.pt', map_location='cpu')
+		# state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s2_0-20200608/weights.pt', map_location='cpu')
+		state = torch.load('/home/work/lixudong/code_work/sgas/cnn/full_train_s3_2-20200608/weights.pt', map_location='cpu')
 		model.load_state_dict(state)
 		model = model.to(device)
 		for i in range(args.start_epoch):
 			scheduler.step()
-		best_val_acc = 97.34#97.32#94.92#94.6#97.2
+		best_val_acc = 97.19#97.34#97.32#94.92#94.6#97.2
 		
 	for epoch in range(args.start_epoch, args.epochs):
 		scheduler.step()
